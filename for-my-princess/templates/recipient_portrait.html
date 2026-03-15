@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .rec-portrait-page {
+        min-height: calc(100vh - 18px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .rec-portrait-blossom {
+        position: absolute;
+        right: -10px;
+        top: 10px;
+        height: 140px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    .rec-portrait-heading {
+        font-family: 'Give You Glory', cursive;
+        font-size: 2rem;
+        color: var(--text-dark);
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    .portrait-frame {
+        border: 3px solid var(--text-dark);
+        background: #fff;
+        padding: 0;
+        line-height: 0;
+        box-shadow: 4px 6px 20px rgba(0,0,0,0.2);
+    }
+
+    .portrait-frame img {
+        display: block;
+        max-width: 480px;
+        max-height: 380px;
+    }
+
+    .rec-portrait-sign {
+        font-family: 'Great Vibes', cursive;
+        font-size: 1.2rem;
+        color: var(--text-mid);
+        margin-top: 12px;
+        text-align: right;
+        width: 480px;
+    }
+
+    .rec-portrait-nav {
+        display: flex;
+        justify-content: flex-end;
+        width: 480px;
+        margin-top: 16px;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+        .rec-portrait-page { padding: 24px 16px; min-height: 100svh; }
+        .rec-portrait-heading { font-size: 1.5rem; }
+        .rec-portrait-blossom { height: 90px; }
+        .portrait-frame img { max-width: 100%; }
+        .rec-portrait-sign { width: 100%; }
+        .rec-portrait-nav { width: 100%; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="dark-bar"></div>
+
+<section class="rec-portrait-page">
+    <img class="rec-portrait-blossom" src="{{ url_for('static', filename='gifs/cherry_blossom.gif') }}" alt="cherry blossom">
+
+    <h1 class="rec-portrait-heading">Thou from the eyes of your beloved.</h1>
+
+    <div class="portrait-frame">
+        <img src="{{ gift['portrait_data'] }}" alt="Portrait">
+    </div>
+
+    <div class="rec-portrait-sign">— painted by {{ gift['sender_name'] }}</div>
+
+    <div class="rec-portrait-nav">
+        <a href="{{ url_for('recipient_end', gift_id=gift['id']) }}" class="btn">Next</a>
+    </div>
+</section>
+
+<div class="dark-bar"></div>
+
+{% endblock %}

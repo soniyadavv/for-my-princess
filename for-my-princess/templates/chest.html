@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .chest-page {
+        min-height: calc(100vh - 18px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .chest-blossom {
+        position: absolute;
+        right: -10px;
+        top: 10px;
+        height: 140px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    .chest-bluebell {
+        position: absolute;
+        left: -20px;
+        bottom: 0;
+        height: 200px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    .chest-heading {
+        font-family: 'Give You Glory', cursive;
+        font-size: 1.8rem;
+        color: var(--text-dark);
+        margin-bottom: 6px;
+    }
+
+    .chest-from {
+        font-family: 'Great Vibes', cursive;
+        font-size: 2rem;
+        color: #c0396b;
+        margin-bottom: 36px;
+    }
+
+    .chest-gif {
+        height: 140px;
+        margin-bottom: 36px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .chest-gif:hover { transform: scale(1.05); }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+        .chest-page { padding: 30px 16px; min-height: 100svh; }
+        .chest-blossom { height: 90px; }
+        .chest-bluebell { height: 140px; }
+        .chest-heading { font-size: 1.4rem; }
+        .chest-from { font-size: 1.6rem; }
+        .chest-gif { height: 110px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="dark-bar"></div>
+
+<section class="chest-page">
+    <img class="chest-blossom" src="{{ url_for('static', filename='gifs/cherry_blossom.gif') }}" alt="cherry blossom">
+    <img class="chest-bluebell" src="{{ url_for('static', filename='gifs/bluebell.gif') }}" alt="bluebell">
+
+    <h1 class="chest-heading">Thou hast received a present<br>from thy chosen knight,</h1>
+    <div class="chest-from">{{ gift['sender_name'] }}</div>
+
+    <img class="chest-gif" src="{{ url_for('static', filename='gifs/chest.gif') }}" alt="treasure chest">
+
+    <a href="{{ url_for('recipient_letter', gift_id=gift['id']) }}" class="btn">Open</a>
+</section>
+
+<div class="dark-bar"></div>
+
+{% endblock %}

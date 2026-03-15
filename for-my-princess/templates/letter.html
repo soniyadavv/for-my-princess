@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .letter-page {
+        min-height: calc(100vh - 18px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .letter-blossom {
+        position: absolute;
+        right: -10px;
+        top: 10px;
+        height: 140px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    .letter-heading {
+        font-family: 'Give You Glory', cursive;
+        font-size: 2rem;
+        color: var(--text-dark);
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    /* ── Parchment ── */
+    .parchment {
+        position: relative;
+        width: 420px;
+        min-height: 480px;
+        background-color: #d4a96a;
+        background-image:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+        border-radius: 2px;
+        padding: 40px 36px 50px;
+        box-shadow: 2px 4px 18px rgba(0,0,0,0.25);
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Torn edge effect top */
+    .parchment::before {
+        content: '';
+        position: absolute;
+        top: -4px; left: 0; right: 0;
+        height: 8px;
+        background: repeating-linear-gradient(
+            90deg,
+            #c8974a 0px, #b8874a 4px,
+            #d4a96a 4px, #d4a96a 12px
+        );
+        opacity: 0.5;
+    }
+
+    .letter-salutation {
+        font-family: 'Great Vibes', cursive;
+        font-size: 1.4rem;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+    }
+
+    .letter-textarea {
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 1rem;
+        color: var(--text-dark);
+        background: transparent;
+        border: none;
+        outline: none;
+        resize: none;
+        flex: 1;
+        min-height: 300px;
+        line-height: 1.9;
+        width: 100%;
+        /* lined paper effect */
+        background-image: repeating-linear-gradient(
+            transparent,
+            transparent 30px,
+            rgba(100,60,20,0.15) 30px,
+            rgba(100,60,20,0.15) 31px
+        );
+        background-size: 100% 31px;
+        padding-top: 4px;
+    }
+
+    .letter-sign {
+        font-family: 'Great Vibes', cursive;
+        font-size: 1.2rem;
+        color: var(--text-dark);
+        text-align: right;
+        margin-top: 16px;
+        opacity: 0.7;
+    }
+
+    .letter-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 420px;
+        margin-top: 16px;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+        .letter-page { padding: 24px 16px; min-height: 100svh; }
+        .letter-heading { font-size: 1.5rem; margin-bottom: 16px; }
+        .letter-blossom { height: 90px; }
+        .parchment { width: 100%; min-height: 420px; padding: 28px 20px 36px; }
+        .letter-textarea { font-size: 0.95rem; }
+        .letter-nav { width: 100%; padding: 0 4px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="dark-bar"></div>
+
+<section class="letter-page">
+    <img class="letter-blossom" src="{{ url_for('static', filename='gifs/cherry_blossom.gif') }}" alt="cherry blossom">
+
+    <h1 class="letter-heading">Write sweet words to<br>thy princess</h1>
+
+    <div class="parchment">
+        <div class="letter-salutation">To my princess,</div>
+        <textarea class="letter-textarea" id="letterText" placeholder="Write here..."></textarea>
+        <div class="letter-sign">— From thy chosen knight</div>
+    </div>
+
+    <div class="letter-nav">
+        <a href="{{ url_for('portrait') }}" class="btn">Go back</a>
+        <button class="btn" id="nextBtn">Next</button>
+    </div>
+</section>
+
+<div class="dark-bar"></div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('nextBtn').addEventListener('click', async () => {
+    const letterText = document.getElementById('letterText').value;
+    await fetch('/save-letter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ letterText })
+    });
+    window.location.href = "{{ url_for('confirm') }}";
+});
+</script>
+{% endblock %}

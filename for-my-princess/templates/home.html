@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    /* ── Hero Section ── */
+    .hero {
+        position: relative;
+        min-height: calc(100vh - 18px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px 50px;
+        overflow: hidden;
+    }
+
+    /* GIF decorations */
+    .hero-bluebell {
+        position: absolute;
+        left: -20px;
+        bottom: 0;
+        height: 210px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    .hero-blossom {
+        position: absolute;
+        right: -10px;
+        top: 10px;
+        height: 160px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    /* Title */
+    .hero-title {
+        text-align: left;
+        margin-bottom: 18px;
+        line-height: 1.1;
+        margin-right: 80px;
+    }
+
+    .title-for-my {
+        font-family: 'Give You Glory', cursive;
+        font-size: 4.5rem;
+        color: var(--text-dark);
+        display: block;
+        margin-bottom: 4px;
+        margin-left: -30px;
+    }
+
+    .title-princess-wrap {
+        display: inline-flex;
+        align-items: baseline;
+    }
+
+    .title-P {
+        font-family: 'Great Vibes', cursive;
+        font-size: 15rem;
+        color: #c0396b;
+        line-height: 1;
+    }
+
+    .title-rincess {
+        font-family: 'Gwendolyn', cursive;
+        font-size: 9.6rem;
+        color: #c0396b;
+        font-weight: 700;
+        margin-left: 2px;
+    }
+
+    /* Tagline */
+    .hero-tagline {
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 2.5rem;
+        text-align: center;
+        color: var(--text-mid);
+        margin-bottom: 28px;
+        line-height: 1.7;
+    }
+
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+        .hero {
+            min-height: 100svh;
+            padding: 30px 16px 40px;
+        }
+
+        .hero-bluebell {
+            height: 140px;
+        }
+
+        .hero-blossom {
+            height: 110px;
+        }
+
+        .title-for-my {
+            font-size: 2rem;
+            margin-left: -10px;
+        }
+
+        .title-P {
+            font-size: 3.8rem;
+        }
+
+        .title-rincess {
+            font-size: 2.4rem;
+        }
+
+        .hero-tagline {
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ── -->
+<section class="hero">
+    <img class="hero-bluebell" src="{{ url_for('static', filename='gifs/bluebell.gif') }}" alt="bluebell flowers">
+    <img class="hero-blossom" src="{{ url_for('static', filename='gifs/cherry_blossom.gif') }}" alt="cherry blossom">
+
+    <div class="hero-title">
+        <span class="title-for-my">For my</span>
+        <div class="title-princess-wrap">
+            <span class="title-P">P</span>
+            <span class="title-rincess">rincess</span>
+        </div>
+    </div>
+
+    <p class="hero-tagline">
+        Send a token of<br>
+        devotion to<br>
+        thy princess.
+    </p>
+
+    <a href="{{ url_for('store') }}" class="btn">Visit the store</a>
+</section>
+
+{% endblock %}

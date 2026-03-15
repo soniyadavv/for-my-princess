@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .confirm-page {
+        min-height: calc(100vh - 18px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .confirm-blossom {
+        position: absolute;
+        right: -10px;
+        top: 10px;
+        height: 140px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    .confirm-heading {
+        font-family: 'Give You Glory', cursive;
+        font-size: 2rem;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .confirm-sub {
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 1rem;
+        color: var(--text-mid);
+        margin-bottom: 32px;
+        text-align: center;
+    }
+
+    /* ── Card ── */
+    .confirm-card {
+        background: var(--btn-bg);
+        border: 1.5px solid var(--btn-border);
+        border-radius: 4px;
+        padding: 32px 36px;
+        width: 100%;
+        max-width: 440px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Name input */
+    .name-label {
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 0.9rem;
+        color: var(--text-mid);
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .name-input {
+        font-family: 'Great Vibes', cursive;
+        font-size: 1.4rem;
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 1.5px solid var(--btn-border);
+        outline: none;
+        color: var(--text-dark);
+        padding: 4px 2px;
+    }
+
+    .name-input::placeholder {
+        opacity: 0.4;
+        font-size: 1.2rem;
+    }
+
+    /* Checklist */
+    .checklist-title {
+        font-family: 'Give You Glory', cursive;
+        font-size: 1.1rem;
+        color: var(--text-dark);
+        margin-bottom: 10px;
+    }
+
+    .checklist {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .check-item {
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-mid);
+    }
+
+    .check-icon {
+        font-size: 1.1rem;
+    }
+
+    .check-item.included { color: var(--text-dark); }
+    .check-item.skipped { opacity: 0.4; text-decoration: line-through; }
+
+    /* Send button */
+    .send-btn {
+        width: 100%;
+        text-align: center;
+        font-size: 1.05rem;
+        padding: 10px;
+    }
+
+    /* Link box — hidden until generated */
+    .link-box {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .link-box.visible { display: flex; }
+
+    .link-label {
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 0.9rem;
+        color: var(--text-mid);
+    }
+
+    .link-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .link-input {
+        flex: 1;
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 0.85rem;
+        padding: 7px 10px;
+        border: 1.5px solid var(--btn-border);
+        background: #fff;
+        border-radius: 2px;
+        color: var(--text-dark);
+        outline: none;
+    }
+
+    .copy-btn {
+        white-space: nowrap;
+        font-size: 0.85rem;
+        padding: 7px 14px;
+    }
+
+    .copy-confirm {
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 0.8rem;
+        color: #90be6d;
+        display: none;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+        .confirm-page { padding: 24px 16px; min-height: 100svh; }
+        .confirm-heading { font-size: 1.6rem; }
+        .confirm-blossom { height: 90px; }
+        .confirm-card { padding: 24px 20px; }
+        .name-input { font-size: 1.2rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="dark-bar"></div>
+
+<section class="confirm-page">
+    <img class="confirm-blossom" src="{{ url_for('static', filename='gifs/cherry_blossom.gif') }}" alt="cherry blossom">
+
+    <h1 class="confirm-heading">Thy present is ready!</h1>
+    <p class="confirm-sub">Sign thy name and send it to thy princess.</p>
+
+    <div class="confirm-card">
+
+        <!-- Sender name -->
+        <div>
+            <label class="name-label" for="senderName">Thy name, dear knight</label>
+            <input class="name-input" type="text" id="senderName" placeholder="Your name...">
+        </div>
+
+        <!-- Checklist -->
+        <div>
+            <div class="checklist-title">What thou hast crafted</div>
+            <div class="checklist">
+                <div class="check-item {{ 'included' if has_portrait else 'skipped' }}">
+                    <span class="check-icon">{{ '🎨' if has_portrait else '○' }}</span>
+                    Portrait of thy beloved
+                </div>
+                <div class="check-item {{ 'included' if has_letter else 'skipped' }}">
+                    <span class="check-icon">{{ '📜' if has_letter else '○' }}</span>
+                    Heartfelt letter
+                </div>
+                <div class="check-item skipped">
+                    <span class="check-icon">○</span>
+                    Bouquet of flowers — coming soon!
+                </div>
+            </div>
+        </div>
+
+        <!-- Send button -->
+        <button class="btn send-btn" id="sendBtn">Send thy present 🌸</button>
+
+        <!-- Link box -->
+        <div class="link-box" id="linkBox">
+            <div class="link-label">Share this link with thy princess ✨</div>
+            <div class="link-row">
+                <input class="link-input" type="text" id="giftLink" readonly>
+                <button class="btn copy-btn" id="copyBtn">Copy</button>
+            </div>
+            <span class="copy-confirm" id="copyConfirm">Copied to clipboard! 💕</span>
+        </div>
+
+    </div>
+
+    <div class="nav-row" style="max-width: 440px;">
+        <a href="{{ url_for('letter') }}" class="btn">Go back</a>
+    </div>
+</section>
+
+<div class="dark-bar"></div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('sendBtn').addEventListener('click', async () => {
+    const senderName = document.getElementById('senderName').value.trim() || 'Thy Chosen Knight';
+
+    const res = await fetch('/submit-gift', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senderName })
+    });
+
+    const data = await res.json();
+    const link = window.location.origin + '/gift/' + data.giftId;
+
+    document.getElementById('giftLink').value = link;
+    document.getElementById('linkBox').classList.add('visible');
+    document.getElementById('sendBtn').disabled = true;
+    document.getElementById('sendBtn').style.opacity = '0.5';
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+    const link = document.getElementById('giftLink').value;
+    navigator.clipboard.writeText(link).then(() => {
+        document.getElementById('copyConfirm').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('copyConfirm').style.display = 'none';
+        }, 2500);
+    });
+});
+</script>
+{% endblock %}

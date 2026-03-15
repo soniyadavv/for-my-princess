@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section style="min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 20px;">
+    <h1 style="font-family:'Give You Glory',cursive; font-size:2rem; margin-bottom:12px;">This present could not be found...</h1>
+    <p style="font-family:'Macondo Swash Caps',serif; color:var(--text-mid); margin-bottom:28px;">The link may be incorrect or the gift has expired.</p>
+    <a href="{{ url_for('home') }}" class="btn">Return home</a>
+</section>
+{% endblock %}

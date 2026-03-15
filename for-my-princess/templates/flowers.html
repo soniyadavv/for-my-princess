@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .flowers-page {
+        min-height: calc(100vh - 36px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .flowers-bluebell {
+        height: 200px;
+        margin-bottom: 30px;
+    }
+
+    .flowers-heading {
+        font-family: 'Give You Glory', cursive;
+        font-size: 2.2rem;
+        color: var(--text-dark);
+        margin-bottom: 16px;
+    }
+
+    .flowers-sub {
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 1rem;
+        color: var(--text-mid);
+        margin-bottom: 36px;
+    }
+
+    .flowers-blossom {
+        position: absolute;
+        right: -10px;
+        top: 10px;
+        height: 140px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+        .flowers-page { padding: 30px 16px; min-height: 100svh; }
+        .flowers-blossom { height: 90px; }
+        .flowers-bluebell { height: 150px; }
+        .flowers-heading { font-size: 1.7rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="dark-bar"></div>
+
+<section class="flowers-page">
+    <img class="flowers-blossom" src="{{ url_for('static', filename='gifs/cherry_blossom.gif') }}" alt="cherry blossom">
+
+    <img class="flowers-bluebell" src="{{ url_for('static', filename='gifs/bluebell.gif') }}" alt="bluebell flowers">
+
+    <h1 class="flowers-heading">Flowers</h1>
+    <p class="flowers-sub">Will be here soon!!</p>
+
+    <a href="{{ url_for('store') }}" class="btn">Go back</a>
+</section>
+
+<div class="dark-bar"></div>
+
+{% endblock %}

@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .portrait-page {
+        min-height: calc(100vh - 18px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .portrait-blossom {
+        position: absolute;
+        right: -10px;
+        top: 10px;
+        height: 140px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    .portrait-heading {
+        font-family: 'Give You Glory', cursive;
+        font-size: 2rem;
+        color: var(--text-dark);
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    /* ── Canvas + Tools layout ── */
+    .canvas-wrapper {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    /* ── Toolbox ── */
+    .toolbox {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: var(--btn-bg);
+        border: 1.5px solid var(--btn-border);
+        border-radius: 4px;
+        padding: 10px 8px;
+    }
+
+    .tool-section-label {
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 0.65rem;
+        color: var(--text-mid);
+        text-align: center;
+        margin-top: 6px;
+    }
+
+    /* Colour swatches */
+    .color-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 20px);
+        gap: 4px;
+    }
+
+    .color-swatch {
+        width: 20px;
+        height: 20px;
+        border-radius: 2px;
+        border: 1.5px solid rgba(0,0,0,0.2);
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+
+    .color-swatch:hover { transform: scale(1.15); }
+    .color-swatch.active { border: 2px solid var(--text-dark); }
+
+    /* Custom colour picker */
+    .color-picker-input {
+        width: 44px;
+        height: 22px;
+        border: 1.5px solid var(--btn-border);
+        border-radius: 2px;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    /* Tool buttons */
+    .tool-btn {
+        width: 44px;
+        height: 34px;
+        background: transparent;
+        border: 1.5px solid transparent;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s, border-color 0.15s;
+    }
+
+    .tool-btn:hover { background: var(--btn-hover); }
+    .tool-btn.active {
+        background: var(--btn-hover);
+        border-color: var(--btn-border);
+    }
+
+    /* Brush size */
+    .size-slider {
+        width: 44px;
+        accent-color: var(--text-mid);
+        cursor: pointer;
+    }
+
+    /* Divider */
+    .tool-divider {
+        width: 100%;
+        height: 1px;
+        background: var(--btn-border);
+        margin: 4px 0;
+        opacity: 0.5;
+    }
+
+    /* ── Drawing Canvas ── */
+    #drawingCanvas {
+        border: 2px solid var(--text-dark);
+        background: #ffffff;
+        cursor: crosshair;
+        display: block;
+        touch-action: none;
+    }
+
+    .portrait-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 640px;
+        margin-top: 16px;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+        .portrait-page {
+            padding: 20px 12px;
+            min-height: 100svh;
+            justify-content: flex-start;
+            padding-top: 30px;
+        }
+
+        .portrait-heading { font-size: 1.5rem; margin-bottom: 16px; }
+        .portrait-blossom { height: 90px; }
+
+        .canvas-wrapper {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .toolbox {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            padding: 8px;
+            gap: 8px;
+        }
+
+        .tool-section-label { display: none; }
+        .tool-divider { display: none; }
+
+        .color-grid {
+            grid-template-columns: repeat(5, 24px);
+        }
+
+        .color-swatch { width: 24px; height: 24px; }
+
+        .size-slider { width: 80px; }
+
+        #drawingCanvas {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 360px;
+        }
+
+        .portrait-nav {
+            max-width: 100%;
+            padding: 0 8px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="dark-bar"></div>
+
+<section class="portrait-page">
+    <img class="portrait-blossom" src="{{ url_for('static', filename='gifs/cherry_blossom.gif') }}" alt="cherry blossom">
+
+    <h1 class="portrait-heading">Create a portrait of<br>thy princess</h1>
+
+    <div class="canvas-wrapper">
+
+        <!-- ── Toolbox ── -->
+        <div class="toolbox">
+
+            <!-- Colours -->
+            <span class="tool-section-label">Colour</span>
+            <div class="color-grid" id="colorGrid">
+                <div class="color-swatch active" style="background:#000000" data-color="#000000"></div>
+                <div class="color-swatch" style="background:#ffffff" data-color="#ffffff"></div>
+                <div class="color-swatch" style="background:#e63946" data-color="#e63946"></div>
+                <div class="color-swatch" style="background:#f4a261" data-color="#f4a261"></div>
+                <div class="color-swatch" style="background:#f9c74f" data-color="#f9c74f"></div>
+                <div class="color-swatch" style="background:#90be6d" data-color="#90be6d"></div>
+                <div class="color-swatch" style="background:#4cc9f0" data-color="#4cc9f0"></div>
+                <div class="color-swatch" style="background:#7b2d8b" data-color="#7b2d8b"></div>
+                <div class="color-swatch" style="background:#f7b2c1" data-color="#f7b2c1"></div>
+                <div class="color-swatch" style="background:#6d4c41" data-color="#6d4c41"></div>
+            </div>
+            <input type="color" class="color-picker-input" id="customColor" title="Custom colour">
+
+            <div class="tool-divider"></div>
+
+            <!-- Brush types -->
+            <span class="tool-section-label">Brush</span>
+            <button class="tool-btn active" data-tool="pencil" title="Pencil">✏️</button>
+            <button class="tool-btn" data-tool="marker" title="Marker">🖊️</button>
+            <button class="tool-btn" data-tool="watercolor" title="Watercolour">💧</button>
+            <button class="tool-btn" data-tool="eraser" title="Eraser">🧹</button>
+
+            <div class="tool-divider"></div>
+
+            <!-- Brush size -->
+            <span class="tool-section-label">Size</span>
+            <input type="range" class="size-slider" id="brushSize" min="1" max="40" value="4">
+
+            <div class="tool-divider"></div>
+
+            <!-- Actions -->
+            <button class="tool-btn" id="undoBtn" title="Undo">↩️</button>
+            <button class="tool-btn" id="clearBtn" title="Clear canvas">🗑️</button>
+        </div>
+
+        <!-- ── Canvas ── -->
+        <canvas id="drawingCanvas" width="480" height="380"></canvas>
+
+    </div>
+
+    <div class="portrait-nav">
+        <a href="{{ url_for('store') }}" class="btn">Go back</a>
+        <button class="btn" id="nextBtn">Next</button>
+    </div>
+</section>
+
+<div class="dark-bar"></div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/canvas.js') }}"></script>
+<script>
+document.getElementById('nextBtn').addEventListener('click', async () => {
+    const imageData = canvas.toDataURL('image/png');
+    const res = await fetch('/save-portrait', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageData })
+    });
+    const data = await res.json();
+    if (data.status === 'ok') {
+        window.location.href = "{{ url_for('letter') }}";
+    }
+});
+</script>
+{% endblock %}

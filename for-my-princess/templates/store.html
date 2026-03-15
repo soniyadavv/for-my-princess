@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .store-page {
+        min-height: calc(100vh - 36px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 50px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .store-blossom {
+        position: absolute;
+        right: -10px;
+        top: 10px;
+        height: 140px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    .store-heading {
+        font-family: 'Give You Glory', cursive;
+        font-size: 2.8rem;
+        color: var(--text-dark);
+        margin-bottom: 50px;
+        text-align: center;
+    }
+
+    .store-cards {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: 900px;
+    }
+
+    .store-card {
+        width: 200px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .store-card p {
+        font-family: 'Macondo Swash Caps', serif;
+        font-size: 0.95rem;
+        color: var(--text-mid);
+        line-height: 1.6;
+        min-height: 64px;
+    }
+
+    .store-card .btn {
+        width: 100%;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+        .store-page {
+            padding: 36px 16px;
+            min-height: 100svh;
+        }
+
+        .store-blossom { height: 100px; }
+
+        .store-heading { font-size: 2rem; margin-bottom: 30px; }
+
+        .store-cards {
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .store-card { width: 100%; max-width: 280px; }
+        .store-card p { min-height: unset; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="dark-bar"></div>
+
+<section class="store-page">
+    <img class="store-blossom" src="{{ url_for('static', filename='gifs/cherry_blossom.gif') }}" alt="cherry blossom">
+
+    <h1 class="store-heading">Store</h1>
+
+    <div class="store-cards">
+        <div class="store-card">
+            <p>Create a dazzling portrait of thy beloved.</p>
+            <a href="{{ url_for('portrait') }}" class="btn">Portrait</a>
+        </div>
+        <div class="store-card">
+            <p>Write a heartfelt letter to thy cherished one.</p>
+            <a href="{{ url_for('letter') }}" class="btn">Letter</a>
+        </div>
+        <div class="store-card">
+            <p>Send thy lover flowers as beautiful as her.</p>
+            <a href="{{ url_for('flowers') }}" class="btn">Flowers</a>
+        </div>
+    </div>
+
+    <div class="nav-row" style="max-width: 700px; margin-top: 40px;">
+        <a href="{{ url_for('home') }}" class="btn">Go back</a>
+    </div>
+</section>
+
+<div class="dark-bar"></div>
+
+{% endblock %}

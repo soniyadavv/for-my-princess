@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .end-page {
+        min-height: calc(100vh - 18px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .end-blossom {
+        position: absolute;
+        right: -10px;
+        top: 10px;
+        height: 140px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    .end-bluebell {
+        position: absolute;
+        left: -20px;
+        bottom: 0;
+        height: 200px;
+        pointer-events: none;
+        transform: scaleX(-1);
+    }
+
+    .end-hearts {
+        height: 100px;
+        margin-bottom: 28px;
+    }
+
+    .end-heading {
+        font-family: 'Give You Glory', cursive;
+        font-size: 1.9rem;
+        color: var(--text-dark);
+        margin-bottom: 10px;
+    }
+
+    .end-sub {
+        font-family: 'Great Vibes', cursive;
+        font-size: 1.6rem;
+        color: #c0396b;
+        margin-bottom: 36px;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+        .end-page { padding: 30px 16px; min-height: 100svh; }
+        .end-blossom { height: 90px; }
+        .end-bluebell { height: 140px; }
+        .end-hearts { height: 70px; }
+        .end-heading { font-size: 1.4rem; }
+        .end-sub { font-size: 1.3rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="dark-bar"></div>
+
+<section class="end-page">
+    <img class="end-blossom" src="{{ url_for('static', filename='gifs/cherry_blossom.gif') }}" alt="cherry blossom">
+    <img class="end-bluebell" src="{{ url_for('static', filename='gifs/bluebell.gif') }}" alt="bluebell">
+
+    <img class="end-hearts" src="{{ url_for('static', filename='gifs/hearts.gif') }}" alt="hearts">
+
+    <h1 class="end-heading">Thou hast received thy present</h1>
+    <div class="end-sub">With love, always.</div>
+
+    <a href="{{ url_for('home') }}" class="btn">Send a present to another princess!</a>
+</section>
+
+<div class="dark-bar"></div>
+
+{% endblock %}
