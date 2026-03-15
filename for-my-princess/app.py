@@ -5,7 +5,7 @@ import json
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = 'for-my-princess-secret-key'
+app.secret_key = os.environ.get('SECRET_KEY', 'for-my-princess-secret-key')
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'gifts.db')
 TEMP_DIR = os.path.join(os.path.dirname(__file__), 'temp_portraits')
@@ -168,4 +168,4 @@ def recipient_end(gift_id):
     return render_template('recipient_end.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
